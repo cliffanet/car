@@ -1,0 +1,10 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "TP4056")(type "KiCad")(uri "${KIPRJMOD}/footprint/TP4056")(options "")(descr ""))
+  (lib (name "DW01A")(type "KiCad")(uri "${KIPRJMOD}/footprint/DW01A")(options "")(descr ""))
+  (lib (name "FS8205")(type "KiCad")(uri "${KIPRJMOD}/footprint/FS8205")(options "")(descr ""))
+  (lib (name "BAT1042")(type "KiCad")(uri "${KIPRJMOD}/footprint/1042")(options "")(descr ""))
+  (lib (name "NX3215SA-32.768K-STD-MUA-14")(type "KiCad")(uri "${KIPRJMOD}/footprint/NX3215SA-32.768K-STD-MUA-14")(options "")(descr ""))
+  (lib (name "TSX-3225_16.0000MF18X-AC3")(type "KiCad")(uri "${KIPRJMOD}/footprint/TSX-3225_16.0000MF18X-AC3")(options "")(descr ""))
+  (lib (name "TYPE-C-31-M-12")(type "KiCad")(uri "${KIPRJMOD}/footprint/TYPE-C-31-M-12")(options "")(descr ""))
+)

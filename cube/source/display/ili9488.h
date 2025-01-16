@@ -23,7 +23,7 @@ public:
 class DsplILI9488 : public DsplIO {
     DsplBufILI9488DMA _buf;
 public:
-    DsplILI9488() : _buf(DSPL_WIDTH, DSPL_HEIGHT, 8, 8) {}
+    DsplILI9488() : _buf(DSPL_WIDTH, DSPL_HEIGHT, 4, 4) {}
     void init();
     inline DsplGfx draw() { return DsplGfx(_buf); }
 };

@@ -8,15 +8,16 @@ class DsplBuf24 : public DsplDraw {
     const uint16_t _xcnt, _ycnt;
     int _x, _y;
     uint16_t _w, _h;
-    uint8_t *_d;
+    uint8_t *_d1, *_d2, *_d;
+    uint8_t _bn;
     inline size_t dsz() const { return (static_cast<size_t>(width) / _xcnt) * (static_cast<size_t>(height) / _ycnt) * 3; }
+    inline bool visibled(int x, int y) {
+        return (x >= _x) && (x < _x+_w) && (y >= _y) && (y < _y+_h);
+    }
     inline uint8_t *d(int x, int y) {
-        if (_d == NULL)
-            return NULL;
-        if ((x < _x) || (x >= _x+_w) || (y < _y) || (y >= _y+_h))
-            return NULL;
         return _d + ((y-_y)*_w + (x-_x))*3;
     }
+    uint8_t *_dnxt();
 
 protected:
     const uint8_t *data() const { return _d; }

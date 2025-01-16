@@ -220,7 +220,10 @@ void DsplBufILI9488DMA::write() {
     // выигрыша от 16 бит в DMA режиме всё равно не наблюдается,
     // не будем использовать
     HAL_SPI_Transmit_DMA(&hspi1, data(), sz());///2);
-    while (SPI1->SR & SPI_SR_BSY_Msk);
+    // т.к. DsplBuf использует два буфера: один отправляет, другой заполняет,
+    // то нет необходимости ждать окончания отправки после старта отправки,
+    // этого достаточно дождаться перед следующей отправкой
+    //while (SPI1->SR & SPI_SR_BSY_Msk);
 }
 
 void DsplBufILI9488DMA::begin() {
@@ -235,7 +238,7 @@ bool DsplBufILI9488DMA::next() {
     if (DsplBuf24::next())
         return true;
     
-    //while (SPI1->SR & SPI_SR_BSY_Msk) ;
+    while (SPI1->SR & SPI_SR_BSY_Msk) ;
     //_SPI16::end();
     _CS::end();
     return false;

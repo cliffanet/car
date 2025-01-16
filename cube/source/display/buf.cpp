@@ -11,12 +11,27 @@ DsplBuf24::DsplBuf24(uint16_t w, uint16_t h, uint8_t xcnt, uint8_t ycnt) :
     _y(0),
     _w(0),
     _h(0),
-    _d(reinterpret_cast<uint8_t *>(malloc(dsz())))
+    _d1(reinterpret_cast<uint8_t *>(malloc(dsz()))),
+    _d2(reinterpret_cast<uint8_t *>(malloc(dsz()))),
+    _d(_d2),
+    _bn(1)
 { }
 
 DsplBuf24::~DsplBuf24() {
+    if (_d1 != NULL)
+        free(_d1);
+    if (_d2 != NULL)
+        free(_d2);
+}
+
+uint8_t *DsplBuf24::_dnxt() {
+    _bn ++;
+    _bn &= 0x1;
+    _d = _bn ? _d2 : _d1;
     if (_d != NULL)
-        free(_d);
+        // надо полностью почистить буфер
+        bzero(_d, dsz());
+    return _d;
 }
 
 void DsplBuf24::begin() {
@@ -24,21 +39,23 @@ void DsplBuf24::begin() {
     _y = 0;
     _w = _xcnt > 0 ? width / _xcnt : 0;
     _h = _ycnt > 0 ? height / _ycnt : 0;
-    if (_d != NULL)
-        // надо полностью почистить буфер
-        bzero(_d, dsz());
+    _dnxt();
 }
 
 void DsplBuf24::pixel(int x, int y, uint16_t color) {
-    auto c = d(x, y);
-    if (c == NULL)
+    if ((_d == NULL) || !visibled(x, y))
         return;
-    c[0] = (color & 0xFF00) >> 8;
-    c[1] = (color & 0x07E0) >> 3;
-    c[2] = (color & 0x001F) << 3;
+    auto c = d(x, y);
+    *c = (color & 0xFF00) >> 8;
+    c++;
+    *c = (color & 0x07E0) >> 3;
+    c++;
+    *c = (color & 0x001F) << 3;
 }
 
 void DsplBuf24::fill(int x, int y, uint16_t w, uint16_t h, uint16_t color) {
+    if (_d == NULL)
+        return;
     // сначала поправим координату x, должно выполняться: (x >= _x) && (x < _x+_w)
     if (x < _x) {
         if (x+w <= _x)
@@ -99,8 +116,7 @@ bool DsplBuf24::next() {
         return false;
 
     // чистим буфер к следующему приёму данных
-    // чистить можно не весь, а только в тот размер, что был
-    bzero(_d, sz());
+    _dnxt();
     
     _x += width / _xcnt;
     if (_x + _w <= width)

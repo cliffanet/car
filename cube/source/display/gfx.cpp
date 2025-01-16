@@ -6,9 +6,11 @@ DsplGfx::DsplGfx(DsplDraw &draw) :
     _draw->begin();
 }
 
-void DsplGfx::clearScreen(uint16_t color) {
-    _draw->fill(0, 0, _draw->width, _draw->height, color);
-    //for (int x = 0; x < _draw->width; x++)
-    //    for (int y = 0; y < _draw->height; y++)
-    //        _draw->pixel(x, y, color);
+void DsplGfx::rect(int x, int y, uint16_t w, uint16_t h) {
+    if ((w == 0) || (h == 0))
+        return;
+    _draw->fill(x, y, w, 1);
+    _draw->fill(x, y+h-1, w, 1);
+    _draw->fill(x, y, 1, h);
+    _draw->fill(x+w-1, y, 1, h);
 }

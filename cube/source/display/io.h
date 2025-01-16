@@ -10,8 +10,9 @@ public:
     virtual ~DsplDraw() = default;
 
     virtual void begin() = 0;
-    virtual void pixel(int x, int y, uint16_t color) = 0;
-    virtual void fill(int x, int y, uint16_t w, uint16_t h, uint16_t color) = 0;
+    virtual void color(uint16_t _color) = 0;
+    virtual void pixel(int x, int y) = 0;
+    virtual void fill(int x, int y, uint16_t w, uint16_t h) = 0;
     virtual bool next() = 0;
 };
 

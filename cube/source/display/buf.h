@@ -9,7 +9,7 @@ class DsplBuf24 : public DsplDraw {
     int _x, _y;
     uint16_t _w, _h;
     uint8_t *_d1, *_d2, *_d;
-    uint8_t _bn;
+    uint8_t _bn, _col1, _col2, _col3;
     inline size_t dsz() const { return (static_cast<size_t>(width) / _xcnt) * (static_cast<size_t>(height) / _ycnt) * 3; }
     inline bool visibled(int x, int y) {
         return (x >= _x) && (x < _x+_w) && (y >= _y) && (y < _y+_h);
@@ -36,8 +36,9 @@ public:
     ~DsplBuf24();
 
     virtual void begin();
-    void pixel(int x, int y, uint16_t color);
-    void fill(int x, int y, uint16_t w, uint16_t h, uint16_t color);
+    void color(uint16_t c);
+    void pixel(int x, int y);
+    void fill(int x, int y, uint16_t w, uint16_t h);
     virtual bool next();
 };
 

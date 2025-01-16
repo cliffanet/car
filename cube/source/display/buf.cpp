@@ -14,7 +14,10 @@ DsplBuf24::DsplBuf24(uint16_t w, uint16_t h, uint8_t xcnt, uint8_t ycnt) :
     _d1(reinterpret_cast<uint8_t *>(malloc(dsz()))),
     _d2(reinterpret_cast<uint8_t *>(malloc(dsz()))),
     _d(_d2),
-    _bn(1)
+    _bn(1),
+    _col1(0),
+    _col2(0),
+    _col3(0)
 { }
 
 DsplBuf24::~DsplBuf24() {
@@ -42,18 +45,24 @@ void DsplBuf24::begin() {
     _dnxt();
 }
 
-void DsplBuf24::pixel(int x, int y, uint16_t color) {
+void DsplBuf24::color(uint16_t c) {
+    _col1 = (c & 0xFF00) >> 8;
+    _col2 = (c & 0x07E0) >> 3;
+    _col3 = (c & 0x001F) << 3;
+}
+
+void DsplBuf24::pixel(int x, int y) {
     if ((_d == NULL) || !visibled(x, y))
         return;
     auto c = d(x, y);
-    *c = (color & 0xFF00) >> 8;
+    *c = _col1;
     c++;
-    *c = (color & 0x07E0) >> 3;
+    *c = _col2;
     c++;
-    *c = (color & 0x001F) << 3;
+    *c = _col3;
 }
 
-void DsplBuf24::fill(int x, int y, uint16_t w, uint16_t h, uint16_t color) {
+void DsplBuf24::fill(int x, int y, uint16_t w, uint16_t h) {
     if (_d == NULL)
         return;
     // сначала поправим координату x, должно выполняться: (x >= _x) && (x < _x+_w)
@@ -88,11 +97,6 @@ void DsplBuf24::fill(int x, int y, uint16_t w, uint16_t h, uint16_t color) {
     auto c = d(x, y);
     if (c == NULL)
         return;
-    uint8_t
-        // заранее подготавливаем передаваемые байты цветов
-        c1 = (color & 0xFF00) >> 8,
-        c2 = (color & 0x07E0) >> 3,
-        c3 = (color & 0x001F) << 3;
     // отступы от буфера слева и справа,
     // которые нам надо будет проскочить после каждой строки
     // отступ слева: x-_x, справа: (_x+_w) - (x+w)
@@ -100,11 +104,11 @@ void DsplBuf24::fill(int x, int y, uint16_t w, uint16_t h, uint16_t color) {
     int pad = (_w-w) * 3;
     for (; h > 0; h--) {
         for (auto ww = w; ww > 0; ww--) {
-            *c = c1;
+            *c = _col1;
             c++;
-            *c = c2;
+            *c = _col2;
             c++;
-            *c = c3;
+            *c = _col3;
             c++;
         }
         c += pad;

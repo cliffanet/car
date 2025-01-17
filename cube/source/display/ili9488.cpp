@@ -135,8 +135,6 @@ static void _init(uint8_t cmd8, const char *data, size_t sz) {
     _cmd8(cmd8, reinterpret_cast<const uint8_t *>(data), sz);
 }
 
-
-
 void DsplILI9488::init() {
     HAL_GPIO_WritePin(DSPL_PIN_BL, GPIO_PIN_SET);
 
@@ -191,25 +189,22 @@ void DsplILI9488::init() {
     HAL_Delay(50);
 }
 
-// ---------------------------------------------------------
-
-void DsplBufILI9488DMA::write() {
-    if (data() == NULL)
+void DsplILI9488::write() {
+    if (_frm.d() == NULL)
         return;
     
     while (SPI1->SR & SPI_SR_BSY_Msk);
     //_SPI16::end();
 
-    auto a = area();
-    auto x2 = a.x + a.w - 1;
+    auto x2 = _frm.x + _frm.w - 1;
     uint8_t x[4] = {
-        static_cast<uint8_t>(a.x>>8),   static_cast<uint8_t>(a.x&0xff),
+        static_cast<uint8_t>(_frm.x>>8),static_cast<uint8_t>(_frm.x&0xff),
         static_cast<uint8_t>(x2>>8),    static_cast<uint8_t>(x2&0xff)
     };
     _cmd8(ILI9488_CASET, x, 4);
-    auto y2 = a.y + a.h - 1;
+    auto y2 = _frm.y + _frm.h - 1;
     uint8_t y[4] = {
-        static_cast<uint8_t>(a.y>>8),   static_cast<uint8_t>(a.y&0xff),
+        static_cast<uint8_t>(_frm.y>>8),static_cast<uint8_t>(_frm.y&0xff),
         static_cast<uint8_t>(y2>>8),    static_cast<uint8_t>(y2&0xff)
     };
     _cmd8(ILI9488_PASET, y, 4);
@@ -219,27 +214,44 @@ void DsplBufILI9488DMA::write() {
     // возможно, надо свапать байты в парах, а это гемор,
     // выигрыша от 16 бит в DMA режиме всё равно не наблюдается,
     // не будем использовать
-    HAL_SPI_Transmit_DMA(&hspi1, data(), sz());///2);
+    HAL_SPI_Transmit_DMA(&hspi1, _frm.d(), _frm.sz());///2);
     // т.к. DsplBuf использует два буфера: один отправляет, другой заполняет,
     // то нет необходимости ждать окончания отправки после старта отправки,
     // этого достаточно дождаться перед следующей отправкой
     //while (SPI1->SR & SPI_SR_BSY_Msk);
 }
 
-void DsplBufILI9488DMA::begin() {
-    DsplBuf24::begin();
-    _CS::beg();
-}
-
-bool DsplBufILI9488DMA::next() {
-    // отправляем текущий буфер на дисплей
-    write();
-
-    if (DsplBuf24::next())
-        return true;
-    
+void DsplILI9488::end() {
     while (SPI1->SR & SPI_SR_BSY_Msk) ;
     //_SPI16::end();
     _CS::end();
+
+    _frm = DsplFrame24(0, 0, 0, 0, NULL);
+}
+
+DsplGfx DsplILI9488::draw() {
+    _buf.begin();
+    _frm = _buf.frame<DsplFrame24>();
+
+    _CS::beg();
+
+    return DsplGfx(_frm);
+}
+
+bool DsplILI9488::next() {
+    write();
+
+    if (_buf.nextfrm()) {
+        // переходим к следующему фрейму
+        _buf.nextbuf();
+        _frm = _buf.frame<DsplFrame24>();
+        return true;
+    }
+
     return false;
+}
+
+void DsplILI9488::draw(draw_t *d) {
+    auto gfx = draw();
+    do { d(gfx); } while (next());
 }

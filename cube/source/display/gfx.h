@@ -1,7 +1,7 @@
 #ifndef __display_gfx_H
 #define __display_gfx_H
 
-#include "io.h"
+#include "frame.h"
 
 #define COLOR_BLACK         0x0000
 #define COLOR_GRAY          0xF7DE
@@ -13,28 +13,32 @@
 #define COLOR_YELLOW        0xFFE0
 #define COLOR_WHITE         0xFFFF
 
+// Перекладываем все проверки на видимость пикселя (внутри фрейма) на DsplGfx
+// Работу сводим к наличию класса DsplFrame, который определяет
+// координаты видимости: x, y, w, h.
+// Внутри него DsplGfx будет пытаться рисовать всё, что требуется.
+// Для уменьшения времени выполнения на разные перепроверки разделим
+// зоны ответственности:
+//
+//      DsplGfx сам проверяет видимость внутри фрейма и гарантирует,
+//      что во всех вызовах _frm->pixel(), _frm->fill() и т.п.
+//      переданные координаты находятся внутри допустимого диапазона у DsplFrame.
+//
+//      DsplFrame может уже не перепроверять входные координаты
+//      и сразу использовать их в адресации пикселя.
 class DsplGfx {
-    DsplDraw *_draw;
+    DsplFrame &_frm;
 public:
-    DsplGfx(DsplDraw &draw);
+    DsplGfx(DsplFrame &frame) : _frm(frame) {};
 
-    inline uint16_t width() const { return _draw->width; }
-    inline uint16_t w()     const { return _draw->width; }
-    inline uint16_t height()const { return _draw->height; }
-    inline uint16_t h()     const { return _draw->height; }
-
-    inline bool next() { return _draw->next(); }
-
-    inline void color(uint16_t c) { _draw->color(c); };
-    inline void clearScreen() {
-        _draw->fill(0, 0, _draw->width, _draw->height);
+    inline void color(uint16_t c) { _frm.color(c); };
+    inline void clear() {
+        _frm.fill(0, 0, _frm.w, _frm.h);
         //for (int x = 0; x < _draw->width; x++)
         //    for (int y = 0; y < _draw->height; y++)
-        //        _draw->pixel(x, y);
+        //        _frm.pixel(x, y);
     }
-    inline void fill(int x, int y, uint16_t w, uint16_t h) {
-        _draw->fill(x, y, w, h);
-    }
+    void fill(int x, int y, uint16_t w, uint16_t h);
     void rect(int x, int y, uint16_t w, uint16_t h);
 };
 

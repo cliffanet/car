@@ -2,44 +2,28 @@
 #define __display_buf_H
 
 #include <stddef.h>
-#include "io.h"
+#include <stdint.h>
 
-class DsplBuf24 : public DsplDraw {
-    const uint16_t _xcnt, _ycnt;
-    int _x, _y;
+class DsplBufDbl {
+    const uint16_t _dsplw, _dsplh, _frmw, _frmh;
+    uint16_t _x, _y;
     uint16_t _w, _h;
-    uint8_t *_d1, *_d2, *_d;
-    uint8_t _bn, _col1, _col2, _col3;
-    inline size_t dsz() const { return (static_cast<size_t>(width) / _xcnt) * (static_cast<size_t>(height) / _ycnt) * 3; }
-    inline bool visibled(int x, int y) {
-        return (x >= _x) && (x < _x+_w) && (y >= _y) && (y < _y+_h);
-    }
-    inline uint8_t *d(int x, int y) {
-        return _d + ((y-_y)*_w + (x-_x))*3;
-    }
-    uint8_t *_dnxt();
-
-protected:
-    const uint8_t *data() const { return _d; }
-    const size_t sz() const { return _w*_h*3; }
-
-    typedef struct {
-        uint16_t x;
-        uint16_t y;
-        uint16_t w;
-        uint16_t h;
-    } area_t;
-    const area_t area() const { return { static_cast<uint16_t>(_x), static_cast<uint16_t>(_y), _w, _h }; }
-
+    uint8_t *_d1, *_d2;
+    size_t _bsz;
+    uint8_t _bn;
 public:
-    DsplBuf24(uint16_t w, uint16_t h, uint8_t xcnt, uint8_t ycnt);
-    ~DsplBuf24();
+    // Создаёт сам буферы
+    DsplBufDbl(uint16_t dsplwidth, uint16_t dsplheight, uint8_t xcnt, uint8_t ycnt, uint8_t *_buf1, uint8_t *_buf2);
 
-    virtual void begin();
-    void color(uint16_t c);
-    void pixel(int x, int y);
-    void fill(int x, int y, uint16_t w, uint16_t h);
-    virtual bool next();
+    inline uint16_t dsplw() const { return _dsplw; }
+    inline uint16_t dsplh() const { return _dsplh; }
+
+    template<class T>
+    inline T frame() { return T(_x, _y, _w, _h, _bn ? _d2 : _d1); }
+
+    void begin();
+    bool nextfrm();
+    void nextbuf();
 };
 
 

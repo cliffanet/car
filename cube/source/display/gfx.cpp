@@ -70,8 +70,8 @@ public:
     }
 };
 
-
-void DsplGfx::fill(int x, int y, uint16_t w, uint16_t h) {
+void DsplGfx::fill(int x, int y, uint16_t w, uint16_t h)
+{
     // сначала поправим координату x, должно выполняться: (x >= _x) && (x < _x+_w)
     if (!_rngfix(x, w, _frm.x, _frm.w))
         return;

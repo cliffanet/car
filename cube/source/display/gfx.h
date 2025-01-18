@@ -34,6 +34,9 @@ public:
     inline void color(uint16_t c) {
         _frm.color(c);
     };
+    inline void color(uint8_t r, uint8_t g, uint8_t b) {
+        _frm.color(r, g, b);
+    }
     inline void zero() {
         _frm.zero();
     }

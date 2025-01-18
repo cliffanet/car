@@ -22,6 +22,12 @@ void DsplFrame24::color(uint16_t _c) {
     _col3 = (_c & 0x001F) << 3;
 }
 
+void DsplFrame24::color(uint8_t r, uint8_t g, uint8_t b) {
+    _col1 = r & 0xfc;
+    _col2 = g & 0xfc;
+    _col3 = b & 0xfc;
+}
+
 void DsplFrame24::pixel(uint16_t _x, uint16_t _y) {
     auto c = d(_x, _y);
     *c = _col1;

@@ -9,6 +9,13 @@ DsplFrame24::DsplFrame24(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t
     _d(data)
 { }
 
+void DsplFrame24::zero() {
+    _col1 = 0;
+    _col2 = 0;
+    _col3 = 0;
+    bzero(_d, sz());
+}
+
 void DsplFrame24::color(uint16_t _c) {
     _col1 = (_c & 0xFF00) >> 8;
     _col2 = (_c & 0x07E0) >> 3;

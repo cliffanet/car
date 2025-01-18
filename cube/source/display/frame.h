@@ -23,6 +23,7 @@ public:
         return *this;
     }
 
+    virtual void zero() = 0;
     virtual void color(uint16_t c) = 0;
     virtual void pixel(uint16_t x, uint16_t y) = 0;
     virtual void fill(uint16_t x, uint16_t y, uint16_t w, uint16_t h) = 0;
@@ -39,6 +40,7 @@ public:
     DsplFrame24(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t *data);
     inline const uint8_t *d() const { return _d; }
     inline size_t sz() const { return w*h*3; }
+    void zero();
     void color(uint16_t _c);
     void pixel(uint16_t _x, uint16_t _y);
     void fill(uint16_t _x, uint16_t _y, uint16_t _w, uint16_t _h);

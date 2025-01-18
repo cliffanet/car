@@ -31,15 +31,21 @@ class DsplGfx {
 public:
     DsplGfx(DsplFrame &frame) : _frm(frame) {};
 
-    inline void color(uint16_t c) { _frm.color(c); };
+    inline void color(uint16_t c) {
+        _frm.color(c);
+    };
+    inline void zero() {
+        _frm.zero();
+    }
     inline void clear() {
         _frm.fill(0, 0, _frm.w, _frm.h);
-        //for (int x = 0; x < _draw->width; x++)
-        //    for (int y = 0; y < _draw->height; y++)
-        //        _frm.pixel(x, y);
     }
     void fill(int x, int y, uint16_t w, uint16_t h);
     void rect(int x, int y, uint16_t w, uint16_t h);
+    void rfill(int x, int y, uint16_t w, uint16_t h, uint16_t r);
+    void rrect(int x, int y, uint16_t w, uint16_t h, uint16_t r);
+    void circle(int x, int y, uint16_t r);
+    void disc(int x, int y, uint16_t r);
 };
 
 

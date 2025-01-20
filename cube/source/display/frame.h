@@ -24,6 +24,11 @@ public:
     }
 
     virtual void zero() = 0;
+
+    typedef struct {
+        uint8_t r, g, b;
+    } rgb_t;
+    virtual rgb_t color() const = 0;
     virtual void color(uint16_t c) = 0;
     virtual void color(uint8_t r, uint8_t g, uint8_t b) = 0;
     virtual void pixel(uint16_t x, uint16_t y) = 0;
@@ -42,6 +47,7 @@ public:
     inline const uint8_t *d() const { return _d; }
     inline size_t sz() const { return w*h*3; }
     void zero();
+    rgb_t color() const { return { _col1, _col2, _col3 }; };
     void color(uint16_t _c);
     void color(uint8_t r, uint8_t g, uint8_t b);
     void pixel(uint16_t _x, uint16_t _y);

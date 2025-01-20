@@ -31,6 +31,9 @@ class DsplGfx {
 public:
     DsplGfx(DsplFrame &frame) : _frm(frame) {};
 
+    inline DsplFrame::rgb_t color() const {
+        return _frm.color();
+    };
     inline void color(uint16_t c) {
         _frm.color(c);
     };

@@ -23,7 +23,8 @@ extern SPI_HandleTypeDef hspi1;
 class _CS {
     public:
         static inline void beg() {
-    while (SPI1->SR & SPI_SR_BSY_Msk);
+            while (SPI1->SR & SPI_SR_BSY_Msk) ;
+
             HAL_GPIO_WritePin(TOUCH_PIN_CS, GPIO_PIN_RESET);
         }
         static inline void end() {
@@ -107,5 +108,9 @@ TouchXPT2046::val_t TouchXPT2046::get() {
 
     //CONSOLE("x: 0x%04x; y: 0x%04x, z: 0x%04x", x, y, z1 + 0xfff - z2);
 
-    return { x/n, y/n, z1/n + 0xfff - z2/n };
+    return {
+        static_cast<uint16_t>((0xfff - ((x/n) & 0xfff)) * TOUCH_WIDTH   / 0x1000),
+        static_cast<uint16_t>((0xfff - ((y/n) & 0xfff)) * TOUCH_HEIGHT  / 0x1000),
+        static_cast<uint16_t>(z1/n + 0xfff - z2/n)
+    };
 }

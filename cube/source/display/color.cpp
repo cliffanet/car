@@ -80,17 +80,17 @@ namespace color {
 
         switch (h) {
             case 0:
-                return {    c,      x,      m   };
+                return {    static_cast<uint8_t>(c),      static_cast<uint8_t>(x),      static_cast<uint8_t>(m)   };
             case 1:
-                return {    x,      c,      m   };
+                return {    static_cast<uint8_t>(x),      static_cast<uint8_t>(c),      static_cast<uint8_t>(m)   };
             case 2:
-                return {    m,      c,      x   };
+                return {    static_cast<uint8_t>(m),      static_cast<uint8_t>(c),      static_cast<uint8_t>(x)   };
             case 3:
-                return {    m,      x,      c   };
+                return {    static_cast<uint8_t>(m),      static_cast<uint8_t>(x),      static_cast<uint8_t>(c)   };
             case 4:
-                return {    x,      m,      c   };
+                return {    static_cast<uint8_t>(x),      static_cast<uint8_t>(m),      static_cast<uint8_t>(c)   };
             case 5:
-                return {    c,      m,      x   };
+                return {    static_cast<uint8_t>(c),      static_cast<uint8_t>(m),      static_cast<uint8_t>(x)   };
         }
         return { 0, 0, 0 };
     }

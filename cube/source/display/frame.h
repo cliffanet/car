@@ -23,6 +23,13 @@ public:
         return *this;
     }
 
+    bool visible(int _x, int _y, uint16_t _w, uint16_t _h) const {
+        return !(
+            (_x+_w <= x) || (_x >= x+w) ||
+            (_y+_h <= y) || (_y >= y+h)
+        );
+    }
+
     virtual void zero() = 0;
 
     typedef struct {

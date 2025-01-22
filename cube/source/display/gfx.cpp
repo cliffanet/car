@@ -70,8 +70,7 @@ public:
     }
 };
 
-void DsplGfx::fill(int x, int y, uint16_t w, uint16_t h)
-{
+void DsplGfx::fill(int x, int y, uint16_t w, uint16_t h) {
     // сначала поправим координату x, должно выполняться: (x >= _x) && (x < _x+_w)
     if (!_rngfix(x, w, _frm.x, _frm.w))
         return;
@@ -164,4 +163,67 @@ void DsplGfx::disc(int x, int y, uint16_t r) {
         _hline(_frm,    x - p.x,    y + p.y,    p.x * 2 + 1);
         _hline(_frm,    x - p.y,    y + p.x,    p.y * 2 + 1);
     } while (p.next());
+}
+
+void DsplGfx::fmap(int x, int y, uint16_t w, uint16_t h, const uint8_t *data) {
+    int ox=x, oy=y, ow=w;
+
+    if (!_rngfix(x, w, _frm.x, _frm.w) || !_rngfix(y, h, _frm.y, _frm.h))
+        return;
+
+    // количество пропущенных точек в самом начале
+    uint32_t bit = (y+_frm.y - oy) * ow + (x+_frm.x - ox);
+    // пропускаем целые байты
+    data += bit >> 3;
+    // а bit - останется текущим битом в байте
+    bit = 1 << (bit & 0x7);
+
+    // разница между оригинальной шириной и пересчитанной
+    // кол-во пикселей, пропускаемых после каждой строчки
+    ow -= w;
+    // разбиваем их на целое число байт
+    uint16_t pad_b  = ow >> 3;
+    // и на число бит в байте
+    uint8_t pad_p   = ow & 0x7;
+
+    for (; h > 0; h --, y++) {
+        auto xx = x;
+        for (auto ww = w; ww > 0; ww--, xx++) {
+            while (bit > 0xff) {
+                bit >>= 8;
+                data++;
+            }
+            if (*data & bit)
+                _frm.pixel(xx, y);
+            bit <<= 1;
+        }
+        
+        data += pad_b;
+        bit  <<= pad_p;
+    }
+}
+
+void DsplGfx::text(int x, int y, const DsplFontU8g2 &fnt, const char *_s) {
+    DsplStr s(_s);
+    
+    while (1) {
+        auto c = s.fetch();
+        if (c == 0xffff)
+            return;
+        
+        auto o = fnt.symbinf(c);
+        if (!o)
+            continue;
+        
+        x += o.padl();
+        int y1 = y - (o.padt()+o.h());
+
+        if (_frm.visible(x, y1, o.w(), o.h())) {
+            uint8_t d[o.bufsz()] = { 0 };
+            o.fill(d);
+            fmap(x, y1, o.w(), o.h(), d);
+        }
+
+        x += o.dx();
+    }
 }

@@ -2,6 +2,7 @@
 #define __display_gfx_H
 
 #include "frame.h"
+#include "fontu8g2.h"
 
 #define COLOR_BLACK         0x0000
 #define COLOR_GRAY          0xF7DE
@@ -52,6 +53,10 @@ public:
     void rrect(int x, int y, uint16_t w, uint16_t h, uint16_t r);
     void circle(int x, int y, uint16_t r);
     void disc(int x, int y, uint16_t r);
+    
+    void fmap(int x, int y, uint16_t w, uint16_t h, const uint8_t *data);
+
+    void text(int x, int y, const DsplFontU8g2 &fnt, const char *s);
 };
 
 

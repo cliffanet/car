@@ -17,6 +17,8 @@ extern "C"
 void init() {
     init_display();
     init_touch();
+    init_testtouch();
+    init_testbox();
 
     while (1) {
         for (auto p: _proc)

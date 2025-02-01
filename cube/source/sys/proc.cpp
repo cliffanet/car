@@ -9,6 +9,7 @@ static std::list<proc::el_t> _proc;
 
 void init_display();
 void init_touch();
+void init_btn();
 
 void init_testbox();
 void init_testtouch();
@@ -17,6 +18,7 @@ extern "C"
 void init() {
     init_display();
     init_touch();
+    init_btn();
     init_testtouch();
     init_testbox();
 
@@ -27,18 +29,24 @@ void init() {
 }
 
 
+extern "C"
+void btn_byexti(uint16_t pin);
 
-/*
 extern "C"
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+    /*
     uint8_t l = HAL_GPIO_ReadPin(TOUCH_PIN_IRQ);
         CONSOLE("touch: %d", l);
 
     if ((GPIO_Pin == GPIO_PIN_10) && !l) {
         tcupd = true;
     }
+    */
+
+    btn_byexti(GPIO_Pin);
 }
 
+/*
 extern "C"
 void HardFault_Handler(void) {
     while (1) {

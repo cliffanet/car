@@ -4,10 +4,10 @@
 #include "gfx.h"
 #include "buf.h"
 
-#define DSPL_PIN_CS     GPIOA, GPIO_PIN_4
+#define DSPL_PIN_CS     GPIOC, GPIO_PIN_4
 #define DSPL_PIN_DC     GPIOB, GPIO_PIN_0
-#define DSPL_PIN_RST    GPIOA, GPIO_PIN_3
-#define DSPL_PIN_BL     GPIOA, GPIO_PIN_2
+#define DSPL_PIN_RST    GPIOC, GPIO_PIN_5
+#define DSPL_PIN_BL     GPIOC, GPIO_PIN_10
 
 #define DSPL_WIDTH      480
 #define DSPL_HEIGHT     320

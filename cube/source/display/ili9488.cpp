@@ -168,7 +168,8 @@ void DsplILI9488::init() {
     // этот дисплей в spi-режиме не поддерживает 16-битную передачу
     _init(ILI9488_PIXFMT,       "\x66", 1);
     // Memory Access
-    _init(ILI9488_MADCTL,       ILI9488_MAD_RGB | ILI9488_MAD_X_LEFT | ILI9488_MAD_Y_DOWN | ILI9488_MAD_VERTICAL);
+    //_init(ILI9488_MADCTL,       ILI9488_MAD_RGB | ILI9488_MAD_X_LEFT | ILI9488_MAD_Y_DOWN | ILI9488_MAD_VERTICAL);
+    _init(ILI9488_MADCTL,       ILI9488_MAD_RGB | ILI9488_MAD_X_RIGHT | ILI9488_MAD_Y_UP | ILI9488_MAD_VERTICAL);
     // Interface Mode Control (SDO NOT USE)
     _init(ILI9488_IMCTR,        "\x80", 1);
     // Frame rate (60Hz)

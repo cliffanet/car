@@ -2,8 +2,8 @@
     Batt
 */
 
-#include "stm32drv.h"
 #include "batt.h"
+#include "stm32drv.h"
 #include "proc.h"
 #include "display.h"
 #include "../display/u8g2_fonts.h"

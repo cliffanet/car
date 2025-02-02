@@ -29,6 +29,11 @@ namespace motor {
 
     dir_t isrun(code_t m);
     void run(code_t m, dir_t dir);
+
+    void straight(bool rev = false);
+    void fstturnl();
+    void fstturnr();
+    void stop(bool brk = false);
 }; // namespace motor
 
 #endif // _chassis_motor_H

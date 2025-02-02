@@ -11,6 +11,7 @@ void init_display();
 void init_touch();
 void init_btn();
 void init_batt();
+void init_motor();
 
 void init_testbox();
 void init_testtouch();
@@ -21,6 +22,7 @@ void init() {
     init_touch();
     init_btn();
     init_batt();
+    init_motor();
     init_testtouch();
     init_testbox();
 

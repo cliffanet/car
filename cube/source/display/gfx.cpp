@@ -203,6 +203,21 @@ void DsplGfx::fmap(int x, int y, uint16_t w, uint16_t h, const uint8_t *data) {
     }
 }
 
+void DsplGfx::symb(int x, int y, const DsplFontU8g2 &fnt, uint16_t c) {
+    auto o = fnt.symbinf(c);
+    if (!o)
+        return;
+        
+    x += o.padl();
+    y -= (o.padt()+o.h());
+
+    if (_frm.visible(x, y, o.w(), o.h())) {
+        uint8_t d[o.bufsz()] = { 0 };
+        o.fill(d);
+        fmap(x, y, o.w(), o.h(), d);
+    }
+}
+
 void DsplGfx::text(int x, int y, const DsplFontU8g2 &fnt, const char *_s) {
     DsplStr s(_s);
     

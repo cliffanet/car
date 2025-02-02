@@ -56,6 +56,7 @@ public:
     
     void fmap(int x, int y, uint16_t w, uint16_t h, const uint8_t *data);
 
+    void symb(int x, int y, const DsplFontU8g2 &fnt, uint16_t c);
     void text(int x, int y, const DsplFontU8g2 &fnt, const char *s);
 };
 

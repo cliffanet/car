@@ -136,7 +136,7 @@ static void _init(uint8_t cmd8, const char *data, size_t sz) {
 }
 
 void DsplILI9488::init() {
-    HAL_GPIO_WritePin(DSPL_PIN_BL, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(DSPL_PIN_BL, GPIO_PIN_RESET);
 
     HAL_GPIO_WritePin(DSPL_PIN_RST, GPIO_PIN_SET);
 

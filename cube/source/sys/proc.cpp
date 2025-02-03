@@ -7,24 +7,21 @@
 
 static std::list<proc::el_t> _proc;
 
+void init_power();
 void init_display();
 void init_touch();
 void init_btn();
 void init_batt();
 void init_motor();
 
-void init_testbox();
-void init_testtouch();
-
 extern "C"
 void init() {
+    init_power();
     init_display();
     init_touch();
     init_btn();
     init_batt();
     init_motor();
-    init_testtouch();
-    init_testbox();
 
     while (1) {
         for (auto p: _proc)

@@ -13,6 +13,9 @@ namespace dspl {
 
     void add(el_t p);
     void del(el_t p);
+
+    void sleep();
+    void resume();
 };
 
 #endif // _sys_display_H

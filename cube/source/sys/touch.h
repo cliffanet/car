@@ -18,7 +18,10 @@ namespace ts {
 
     typedef void (*hnd_t)(uint16_t x, uint16_t y, bool tch);
     void hndadd(hnd_t hnd);
-    void hndadd(hnd_t hnd);
+    void hnddel(hnd_t hnd);
+
+    void sleep();
+    void resume();
 }
 
 #endif // _sys_touch_H

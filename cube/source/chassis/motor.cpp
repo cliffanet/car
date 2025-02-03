@@ -63,6 +63,7 @@ static void _draw(DsplGfx &gfx) {
 }
 
 void init_motor() {
+    motor::resume();
     proc::add(_proc);
     dspl::add(_draw);
 }
@@ -130,5 +131,12 @@ namespace motor {
         run(L_B, brk ? BRK : OFF);
         run(R_A, brk ? BRK : OFF);
         run(R_B, brk ? BRK : OFF);
+    }
+
+    void sleep() {
+        HAL_GPIO_WritePin(MOT_PIN_SLEEP, GPIO_PIN_RESET);
+    }
+    void resume() {
+        HAL_GPIO_WritePin(MOT_PIN_SLEEP, GPIO_PIN_SET);
     }
 }; // namespace motor

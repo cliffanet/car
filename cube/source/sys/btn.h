@@ -38,6 +38,7 @@ namespace btn {
     void set(code_t code, hnd_t hndsmpl, hnd_t hndlong = NULL);
     void hold(hnd_t hnd);
     void sleep();
+    void resume();
 
     bool isactive(uint32_t tickcnt = BTN_ACTIVE_SHORT);
     bool ispushed();

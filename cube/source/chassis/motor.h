@@ -34,6 +34,9 @@ namespace motor {
     void fstturnl();
     void fstturnr();
     void stop(bool brk = false);
+
+    void sleep();
+    void resume();
 }; // namespace motor
 
 #endif // _chassis_motor_H

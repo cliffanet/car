@@ -4,6 +4,7 @@
 
 #include "btn.h"
 #include "proc.h"
+#include "power.h"
 #include "stm32drv.h"
 
 
@@ -65,6 +66,8 @@ namespace btn {
         auto tm = HAL_GetTick();
 
         if (chg) {
+            pwr::active();
+
             _hold = NULL;
             _tickact = 0;
             if (pushed && ((tm-b.tmrls) > BTN_FILTER_TIME)) {
@@ -141,6 +144,19 @@ namespace btn {
 
     void sleep() {
         _sleep = true;
+        while (ispushed())
+            asm("");
+    }
+
+    void resume() {
+        while (ispushed())
+            asm("");
+        
+        _sleep = false;
+        _tickact = 0;
+
+        for (auto &b: _all)
+            _initpin(b);
     }
 
     bool isactive(uint32_t tickcnt) {
@@ -158,23 +174,32 @@ namespace btn {
 
 
 #include "log.h"
+#include "../chassis/motor.h"
 
 void init_btn() {
-    btn::_sleep = false;
-    btn::_tickact = 0;
-
-    for (auto &b: btn::_all)
-        btn::_initpin(b);
+    btn::resume();
     proc::add(btn::_proc);
 
     btn::set(btn::SEL, [] () {
         CONSOLE("btn SEL");
+        motor::stop();
     });
     btn::set(btn::UP,  [] () {
-        CONSOLE("btn UP"); });
-    btn::set(btn::DN,  [] () { CONSOLE("btn DN"); });
-    btn::set(btn::LT,  [] () { CONSOLE("btn LT"); });
-    btn::set(btn::RT,  [] () { CONSOLE("btn RT"); });
+        CONSOLE("btn UP");
+        motor::straight(false);
+    });
+    btn::set(btn::DN,  [] () {
+        CONSOLE("btn DN");
+        motor::straight(true);
+    });
+    btn::set(btn::LT,  [] () {
+        CONSOLE("btn LT");
+        motor::fstturnl();
+    });
+    btn::set(btn::RT,  [] () {
+        CONSOLE("btn RT");
+        motor::fstturnr();
+    });
 }
 
 #ifdef __cplusplus

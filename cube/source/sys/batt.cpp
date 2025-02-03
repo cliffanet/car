@@ -58,19 +58,19 @@ static void _draw(DsplGfx &gfx) {
         else
             gfx.color(COLOR_YELLOW);
         
-        static DsplFontU8g2 f(u8g2_font_battery24_tr);
+        DsplFontU8g2 f(u8g2_font_battery24_tr);
         gfx.symb(0, 25, f, '0' + (v05 > 0 ? v05-1 : 0));
     }
 
     if (_chg_act) {
         gfx.color(COLOR_RED);
-        static DsplFontU8g2 f(u8g2_font_open_iconic_embedded_2x_t);
+        DsplFontU8g2 f(u8g2_font_open_iconic_embedded_2x_t);
         gfx.symb(3, 22, f, 'C');
     }
     else
     if (_chg_stb) {
         gfx.color(COLOR_BLUE);
-        static DsplFontU8g2 f(u8g2_font_open_iconic_embedded_2x_t);
+        DsplFontU8g2 f(u8g2_font_open_iconic_embedded_2x_t);
         gfx.symb(3, 22, f, 'C');
     }
 }

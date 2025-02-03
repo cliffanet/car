@@ -6,6 +6,7 @@
 #include "proc.h"
 #include "power.h"
 #include "stm32drv.h"
+#include "../path.h"
 
 
 #define BTN_PIN_SEL     GPIOB, GPIO_PIN_7
@@ -182,22 +183,27 @@ void init_btn() {
 
     btn::set(btn::SEL, [] () {
         CONSOLE("btn SEL");
+        path::stop();
         motor::stop();
     });
     btn::set(btn::UP,  [] () {
         CONSOLE("btn UP");
+        path::stop();
         motor::straight(false);
     });
     btn::set(btn::DN,  [] () {
         CONSOLE("btn DN");
+        path::stop();
         motor::straight(true);
     });
     btn::set(btn::LT,  [] () {
         CONSOLE("btn LT");
+        path::stop();
         motor::fstturnl();
     });
     btn::set(btn::RT,  [] () {
         CONSOLE("btn RT");
+        path::stop();
         motor::fstturnr();
     });
 }

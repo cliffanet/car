@@ -13,6 +13,7 @@ void init_touch();
 void init_btn();
 void init_batt();
 void init_motor();
+void init_path();
 
 extern "C"
 void init() {
@@ -22,6 +23,7 @@ void init() {
     init_btn();
     init_batt();
     init_motor();
+    init_path();
 
     while (1) {
         for (auto p: _proc)

@@ -42,6 +42,14 @@ inline const mot_t *mot(motor::code_t m) {
 static bool _flt_l = false, _flt_r = false;
 static uint8_t _blink = 0;
 
+static enum {
+    DIR_STOP,
+    DIR_UP,
+    DIR_DOWN,
+    DIR_LEFT,
+    DIR_RIGHT
+} _dir = DIR_STOP;
+
 static void _proc() {
     _flt_l = HAL_GPIO_ReadPin(MOT_PIN_FLT_L) == GPIO_PIN_RESET;
     _flt_r = HAL_GPIO_ReadPin(MOT_PIN_FLT_R) == GPIO_PIN_RESET;
@@ -52,13 +60,24 @@ static void _proc() {
 static void _draw(DsplGfx &gfx) {
     if (_flt_l && (_blink%10 > 4)) {
         gfx.color(COLOR_RED);
-        static DsplFontU8g2 f(u8g2_font_open_iconic_play_4x_t);
+        DsplFontU8g2 f(u8g2_font_open_iconic_play_4x_t);
         gfx.symb(480 - 64, 25, f, 'I');
     }
     if (_flt_r && (_blink%10 > 4)) {
         gfx.color(COLOR_RED);
-        static DsplFontU8g2 f(u8g2_font_open_iconic_play_4x_t);
+        DsplFontU8g2 f(u8g2_font_open_iconic_play_4x_t);
         gfx.symb(480 - 32, 25, f, 'J');
+    }
+
+    if (_dir > DIR_STOP) {
+        gfx.color(COLOR_GREEN);
+        DsplFontU8g2 f(u8g2_font_open_iconic_arrow_8x_t);
+        uint16_t c =
+            _dir == DIR_UP      ? 'G' :
+            _dir == DIR_DOWN    ? 'D' :
+            _dir == DIR_LEFT    ? 'E' :
+            _dir == DIR_RIGHT   ? 'F' : ' ';
+        gfx.symb(480 - 120, 190, f, c);
     }
 }
 
@@ -110,6 +129,7 @@ namespace motor {
         run(L_B, rev ? BAC : FWD);
         run(R_A, rev ? BAC : FWD);
         run(R_B, rev ? BAC : FWD);
+        _dir = rev ? DIR_DOWN : DIR_UP;
     }
 
     void fstturnl() {
@@ -117,6 +137,7 @@ namespace motor {
         run(L_B, BAC);
         run(R_A, FWD);
         run(R_B, FWD);
+        _dir = DIR_LEFT;
     }
 
     void fstturnr() {
@@ -124,6 +145,7 @@ namespace motor {
         run(L_B, FWD);
         run(R_A, BAC);
         run(R_B, BAC);
+        _dir = DIR_RIGHT;
     }
 
     void stop(bool brk) {
@@ -131,6 +153,7 @@ namespace motor {
         run(L_B, brk ? BRK : OFF);
         run(R_A, brk ? BRK : OFF);
         run(R_B, brk ? BRK : OFF);
+        _dir = DIR_STOP;
     }
 
     void sleep() {

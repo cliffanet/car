@@ -33,7 +33,7 @@ namespace motor {
     void straight(bool rev = false);
     void fstturnl();
     void fstturnr();
-    void stop(bool brk = false);
+    void stop(bool brk = true);
 
     void sleep();
     void resume();

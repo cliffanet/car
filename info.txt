@@ -2,5 +2,7 @@ http://www.lcdwiki.com/3.5inch_SPI_Module_ILI9488_SKU%3AMSP3520
 https://github.com/DustinWatts/FreeTouchDeck
 https://lvgl.io/
 
+https://github.com/TrashRobotics/CVbot
+
 DW01A:
 https://antenna-dvb-t2.ru/show_bat.php?id=29

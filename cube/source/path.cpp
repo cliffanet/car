@@ -10,7 +10,7 @@
 #include <math.h>
 
 // время полного оборота на 360
-#define TURN_TIME   5000
+#define TURN_TIME   2726
 // время преодоления 1 пикселя на карте
 #define PIXL_TIME   35
 

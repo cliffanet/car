@@ -5,7 +5,14 @@
 
 Может быть использован в разработке сторонних arduino-подобных проектах.
 
-[видео](https://disk.yandex.ru/d/Th2OHgLXllmlFg/car.mov)
+![](doc/main.full.jpg)
+![](doc/main.inner.jpg)
+
+![](doc/main.moto.jpg) ![](doc/main.pcb.jpg)
+
+
+- [видео 1](https://disk.yandex.ru/d/IK6FT8vPRshmdA/IMG_3110.MOV)
+- [видео 2](https://disk.yandex.ru/d/IK6FT8vPRshmdA/IMG_3111.MOV)
 
 ## Инструкция пользователя
 
@@ -77,6 +84,17 @@
     ```
 
 6. Если всё скомпилировалось успешно, во вложенной директории build будет лежать файл car.stm32f401ret.bin
+
+[Инструкция по обновлению прошивки](doc/fwburn/README.md)
+
+
+## Изготовление платы
+
+- [Архив с gerber-файлами](hw/v1.0/car.v.1.0.zip)
+
+- [Схема принципиальная](hw/v1.0/car.v1.0.jpg)
+
+![](doc/pcb.top.png) ![](doc/pcb.bottom.png)
 
 
 ## Изготовление и сборка корпуса

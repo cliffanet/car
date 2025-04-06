@@ -14,6 +14,7 @@ void init_btn();
 void init_batt();
 void init_motor();
 void init_path();
+void init_sr04();
 
 extern "C"
 void init() {
@@ -24,6 +25,7 @@ void init() {
     init_batt();
     init_motor();
     init_path();
+    init_sr04();
 
     while (1) {
         for (auto p: _proc)
@@ -32,6 +34,8 @@ void init() {
 }
 
 
+extern "C"
+void sr04_byexti(uint16_t pin);
 extern "C"
 void btn_byexti(uint16_t pin);
 
@@ -46,6 +50,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     }
     */
 
+    sr04_byexti(GPIO_Pin);
     btn_byexti(GPIO_Pin);
 }
 

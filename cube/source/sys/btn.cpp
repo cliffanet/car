@@ -176,6 +176,7 @@ namespace btn {
 
 #include "log.h"
 #include "../chassis/motor.h"
+#include "../chassis/sr04.h"
 
 void init_btn() {
     btn::resume();
@@ -183,27 +184,32 @@ void init_btn() {
 
     btn::set(btn::SEL, [] () {
         CONSOLE("btn SEL");
+        sr04::stop();
         path::stop();
         motor::stop();
     });
     btn::set(btn::UP,  [] () {
         CONSOLE("btn UP");
         path::stop();
+        sr04::start();
         motor::straight(false);
     });
     btn::set(btn::DN,  [] () {
         CONSOLE("btn DN");
         path::stop();
+        sr04::start();
         motor::straight(true);
     });
     btn::set(btn::LT,  [] () {
         CONSOLE("btn LT");
         path::stop();
+        sr04::start();
         motor::fstturnl();
     });
     btn::set(btn::RT,  [] () {
         CONSOLE("btn RT");
         path::stop();
+        sr04::start();
         motor::fstturnr();
     });
 }

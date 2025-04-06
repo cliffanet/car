@@ -93,7 +93,17 @@ namespace motor {
         if (!m)
             return OFF;
 
-        return OFF;
+        auto in1 = HAL_GPIO_ReadPin(m->in1.gpiox, m->in1.pin);
+        auto in2 = HAL_GPIO_ReadPin(m->in2.gpiox, m->in2.pin);
+
+        return
+            (in1 == GPIO_PIN_RESET) && (in2 == GPIO_PIN_SET) ?
+                (m->rev ? FWD : BAC) :
+            (in1 == GPIO_PIN_SET) && (in2 == GPIO_PIN_RESET) ?
+                (m->rev ? BAC : FWD) :
+            (in1 == GPIO_PIN_SET) && (in2 == GPIO_PIN_SET) ?
+                BRK :
+                OFF;
     }
 
     void run(code_t _m, dir_t dir) {

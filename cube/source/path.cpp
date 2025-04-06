@@ -5,6 +5,7 @@
 #include "sys/power.h"
 #include "sys/stm32drv.h"
 #include "chassis/motor.h"
+#include "chassis/sr04.h"
 
 #include <list>
 #include <math.h>
@@ -118,11 +119,18 @@ static void (*_next)() = NULL;
 extern TIM_HandleTypeDef htim1;
 extern "C"
 void path_timer() {
+    if (sr04::isback())
+        // не двигаемся дальше по path, пока работает
+        // самоотворот по дальномеру.
+        return;
+    
     if (_cc > 0)
         _cc --;
     else
     if (_next != NULL)
         _next();
+    else
+        sr04::stop();
 }
 
 static void _run_turn();
@@ -154,6 +162,7 @@ static void _run_turn() {
     _path.erase(_path.begin());
     if (_path.size() < 2) {
         path::stop();
+        sr04::stop();
         return;
     }
     _turn(_fi(p1, _path.front(), *(++_path.begin())));
@@ -174,6 +183,8 @@ static void _run() {
     
     _cc = 5000;
     _next = _run_start;
+
+    sr04::start();
 }
 
 // --------------------------------------------------

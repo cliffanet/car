@@ -78,6 +78,7 @@ public:
     DsplFontU8g2(const uint8_t *font);
     int8_t  ascent()    const { return ascent_A; }
     int8_t  descent()   const { return descent_g; }
+    uint16_t width(const char *s);
 
     SymbInf symbinf(uint16_t symb) const { return SymbInf(*this, symb); };
 };

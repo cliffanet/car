@@ -120,6 +120,25 @@ DsplFontU8g2::DsplFontU8g2(const uint8_t *font) :
     start_pos_unicode       = (h << 8) | _vv(&font);
 }
 
+uint16_t DsplFontU8g2::width(const char *_s) {
+    DsplStr s(_s);
+    uint16_t x = 0;
+    
+    while (1) {
+        auto c = s.fetch();
+        if (c == 0xffff)
+            break;
+        
+        auto o = symbinf(c);
+        if (!o)
+            continue;
+        
+        x += o.padl() + o.dx();
+    }
+
+    return x;
+}
+
 const uint8_t *DsplFontU8g2::_data(uint16_t s) const {
     auto d = _d;
 

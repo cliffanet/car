@@ -78,10 +78,10 @@ extern TIM_HandleTypeDef htim2;
     extern "C"
 #endif
 void sr04_byexti(uint16_t pin) {
-    if (pin != GPIO_PIN_3)
+    if (pin != GPIO_PIN_2)
         return;
     uint32_t cnt = __HAL_TIM_GET_COUNTER(&htim2);
-    auto v = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3);
+    auto v = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2);
     if (v) {
         if (_eus > 0)
             _eok = false;
@@ -100,7 +100,7 @@ namespace sr04 {
 
     void start() {
         _erun = true;
-        HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+        HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
         proc::add(_proc);
         dspl::add(_draw);
     }
@@ -108,13 +108,13 @@ namespace sr04 {
     void stop() {
         _erun = false;
         _eback = false;
-        HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_3);
+        HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_4);
         proc::del(_proc);
         dspl::del(_draw);
     }
 
     uint16_t distmm() {
-        return _eus * 10 / 56;
+        return _eus * 10 / 58;
     }
 
     bool isback() {
